@@ -1,4 +1,4 @@
-module github.com/soichisumi/customErrResponse
+module github.com/soichisumi/grpc-custom-error-sample
 
 go 1.12
 
