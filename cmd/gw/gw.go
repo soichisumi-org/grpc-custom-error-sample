@@ -3,7 +3,8 @@ package main
 import (
 	"context"
 	"fmt"
-	"github.com/GincoInc/forseti/internal/pkg/proto"
+	"github.com/soichisumi/customErrResponse/app/proto"
+
 	"github.com/gorilla/handlers"
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 	"google.golang.org/grpc"
@@ -21,11 +22,7 @@ func newGateway(ctx context.Context, opts ...runtime.ServeMuxOption) (http.Handl
 		return nil, err
 	}
 
-	err = proto.RegisterForsetiHandler(ctx, mux, conn)
-	if err != nil {
-		return nil, err
-	}
-	err = proto.RegisterHealthCheckServiceHandler(ctx, mux, conn)
+	err = proto.RegisterServerHandler(ctx, mux, conn)
 	if err != nil {
 		return nil, err
 	}
