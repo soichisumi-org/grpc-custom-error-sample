@@ -1,0 +1,22 @@
+syntax = "proto3";
+package proto;
+
+import "google/api/annotations.proto";
+
+// End Point
+service Server{
+    rpc GetData (GetDataRequest) returns (GetDataResponse) {
+        option (google.api.http) = {
+            get: "/data"
+        };
+    }
+}
+
+message GetDataRequest {
+
+}
+
+message GetDataResponse{
+    string str = 1;
+    uint32 num = 2;
+}
