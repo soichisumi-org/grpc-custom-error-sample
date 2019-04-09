@@ -2,14 +2,14 @@ package app
 
 import (
 	"context"
-	"github.com/soichisumi/customErrResponse/app/proto"
+	"github.com/soichisumi-sandbox/grpc-custom-error-sample/app/proto"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/metadata"
 	"google.golang.org/grpc/status"
 )
 
-const ErrorDetailKeyPrefix = "error-detail-" // converted to lowercase in setTrailer
+const ErrorDetailKeyPrefix = "error-detail" // converted to lowercase in setTrailer
 
 func NewServer() Server {return Server{}}
 
