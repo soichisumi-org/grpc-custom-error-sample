@@ -2,8 +2,8 @@ package main
 
 import (
 	"fmt"
-	"github.com/soichisumi/customErrResponse/app"
-	"github.com/soichisumi/customErrResponse/app/proto"
+	"github.com/soichisumi-sandbox/grpc-custom-error-sample/app"
+	"github.com/soichisumi-sandbox/grpc-custom-error-sample/app/proto"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 	"log"
