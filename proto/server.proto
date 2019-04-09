@@ -13,7 +13,7 @@ service Server{
 }
 
 message GetDataRequest {
-
+    bool success = 1;
 }
 
 message GetDataResponse{
