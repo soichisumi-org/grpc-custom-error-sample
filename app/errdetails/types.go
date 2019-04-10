@@ -1,21 +1,15 @@
 package errdetails
 
-import "google.golang.org/grpc/metadata"
-
-type Detail struct {
+type ErrDetail struct {
 	Code int32 `json:"code"`
 	Name string `json:"name"`
 	Message string `json:"message"`
 }
 
-type errorBody struct {
-	Message string `json:”message"`
-	GrpcCode int32 `json:"grpcCode"`
-	Details []Detail `json:"details"`
+type ErrorBody struct {
+	Message string      `json:”message"`
+	GrpcCode int32      `json:"grpcCode"`
+	Details []ErrDetail `json:"details"`
 }
 
-// ServerMetadata consists of metadata sent from gRPC server.
-type ServerMetadata struct {
-	HeaderMD  metadata.MD
-	TrailerMD metadata.MD
-}
+const ErrorDetailKey = "error-detail" // converted to lowercase in setTrailer
