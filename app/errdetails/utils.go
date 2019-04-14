@@ -22,6 +22,7 @@ func AddErrorDetail(ctx context.Context, detail ErrorDetail) error {
 	}
 
 	md := metadata.Pairs(ErrorDetailKey, string(bytes))
+	fmt.Printf("added error detail: %+v\n", detail)
 	return grpc.SetTrailer(ctx, md)
 }
 
@@ -66,21 +67,21 @@ func CustomHTTPError(ctx context.Context, _ *runtime.ServeMux, marshaler runtime
 	// set error details to body
 	md, ok := runtime.ServerMetadataFromContext(ctx)
 	if !ok {
-		grpclog.Infof("Failed to extract ServerMetadata from context")
+		grpclog.Errorf("Failed to extract ServerMetadata from context")
 	}
 	details, err := GetErrorDetails(md)
 	if err != nil {
-		grpclog.Infof("Failed to get ErrorDetails from metadata")
-		body.Details = details
+		grpclog.Errorf("Failed to get ErrorDetails from metadata")
 	}
+	body.Details = details
 
 	// marshal body
 	buf, merr := marshaler.Marshal(body)
 	if merr != nil {
-		grpclog.Infof("Failed to marshal error message %q: %v", body, merr)
+		grpclog.Errorf("Failed to marshal error message %q: %v", body, merr)
 		w.WriteHeader(http.StatusInternalServerError)
 		if _, err := io.WriteString(w, fallback); err != nil {
-			grpclog.Infof("Failed to write response: %v", err)
+			grpclog.Errorf("Failed to write response: %v", err)
 		}
 		return
 	}
@@ -89,6 +90,6 @@ func CustomHTTPError(ctx context.Context, _ *runtime.ServeMux, marshaler runtime
 	st := runtime.HTTPStatusFromCode(s.Code())
 	w.WriteHeader(st)
 	if _, err := w.Write(buf); err != nil {
-		grpclog.Infof("Failed to write response: %v", err)
+		grpclog.Errorf("Failed to write response: %v", err)
 	}
 }
