@@ -15,7 +15,7 @@ import (
 	"strings"
 )
 
-func AddErrorDetail(ctx context.Context, detail ErrDetail) error {
+func AddErrorDetail(ctx context.Context, detail ErrorDetail) error {
 	bytes, err := json.Marshal(detail)
 	if err != nil {
 		return err
@@ -25,8 +25,8 @@ func AddErrorDetail(ctx context.Context, detail ErrDetail) error {
 	return grpc.SetTrailer(ctx, md)
 }
 
-func GetErrorDetails(md runtime.ServerMetadata) ([]ErrDetail, error) {
-	details := make([]ErrDetail, 0)
+func GetErrorDetails(md runtime.ServerMetadata) ([]ErrorDetail, error) {
+	details := make([]ErrorDetail, 0)
 	for k, vs := range md.TrailerMD {
 		fmt.Printf("k: %+v, vs: %+v\n", k, vs)
 		if !strings.Contains(k, ErrorDetailKey) {
@@ -35,7 +35,7 @@ func GetErrorDetails(md runtime.ServerMetadata) ([]ErrDetail, error) {
 
 		for _, v := range vs {
 			fmt.Printf("v: %+v\n", v)
-			var detail ErrDetail
+			var detail ErrorDetail
 			if err := json.Unmarshal([]byte(v), &detail); err != nil {
 				return nil, err
 			}
