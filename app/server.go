@@ -14,7 +14,7 @@ type Server struct{}
 
 func (s Server) GetData(ctx context.Context, req *proto.GetDataRequest) (*proto.GetDataResponse, error) {
 	if !req.Success {
-		_ = errdetails.SetErrDetail(ctx, errdetails.ErrDetail{
+		_ = errdetails.AddErrorDetail(ctx, errdetails.ErrDetail{
 			Code:    1000,
 			Name:    "Invalid Request",
 			Message: "success is false",

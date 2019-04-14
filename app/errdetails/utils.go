@@ -15,7 +15,7 @@ import (
 	"strings"
 )
 
-func SetErrDetail(ctx context.Context, detail ErrDetail) error {
+func AddErrorDetail(ctx context.Context, detail ErrDetail) error {
 	bytes, err := json.Marshal(detail)
 	if err != nil {
 		return err
@@ -25,7 +25,7 @@ func SetErrDetail(ctx context.Context, detail ErrDetail) error {
 	return grpc.SetTrailer(ctx, md)
 }
 
-func GetErrDetails(md runtime.ServerMetadata) ([]ErrDetail, error) {
+func GetErrorDetails(md runtime.ServerMetadata) ([]ErrDetail, error) {
 	details := make([]ErrDetail, 0)
 	for k, vs := range md.TrailerMD {
 		fmt.Printf("k: %+v, vs: %+v\n", k, vs)
@@ -63,13 +63,16 @@ func CustomHTTPError(ctx context.Context, _ *runtime.ServeMux, marshaler runtime
 		GrpcCode: int32(s.Code()),
 	}
 
-	// retrieve server metadata
+	// set error details to body
 	md, ok := runtime.ServerMetadataFromContext(ctx)
 	if !ok {
 		grpclog.Infof("Failed to extract ServerMetadata from context")
 	}
-	details, _ := GetErrDetails(md)
-	body.Details = details
+	details, err := GetErrorDetails(md)
+	if err != nil {
+		grpclog.Infof("Failed to get ErrorDetails from metadata")
+		body.Details = details
+	}
 
 	// marshal body
 	buf, merr := marshaler.Marshal(body)
